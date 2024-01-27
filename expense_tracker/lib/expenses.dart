@@ -1,3 +1,4 @@
+import 'package:expense_tracker/expenses_list.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
@@ -43,11 +44,13 @@ class _ExpensesTrackerAppState extends State<ExpensesTrackerApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const Scaffold(
+        home: Scaffold(
           body: Column(
             children: [
-              Text("The chart"),
-              Text("Expense list ..."),
+              const Text("The chart"),
+              Expanded(
+                child: ExpenseList(expenses: _registeredExpenses),
+              ),
             ],
           ),
         ));

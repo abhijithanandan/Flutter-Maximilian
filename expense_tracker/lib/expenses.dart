@@ -47,29 +47,24 @@ class _ExpensesTrackerAppState extends State<ExpensesTrackerApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Expenses Tracker',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Expenses Tracker'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: _openAddExpenseOverlay,
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Expenses Tracker'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _openAddExpenseOverlay,
           ),
-          body: Column(
-            children: [
-              const Text("The chart"),
-              Expanded(
-                child: ExpenseList(expenses: _registeredExpenses),
-              ),
-            ],
+        ],
+      ),
+      body: Column(
+        children: [
+          const Text("The chart"),
+          Expanded(
+            child: ExpenseList(expenses: _registeredExpenses),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }

@@ -45,6 +45,15 @@ class _ExpensesTrackerAppState extends State<ExpensesTrackerApp> {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Expenses Tracker'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {},
+              ),
+            ],
+          ),
           body: Column(
             children: [
               const Text("The chart"),

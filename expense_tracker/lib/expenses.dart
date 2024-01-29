@@ -40,6 +40,7 @@ class _ExpensesTrackerAppState extends State<ExpensesTrackerApp> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (cxt) => NewExpense(onAddExpense: _addExpense),
     );

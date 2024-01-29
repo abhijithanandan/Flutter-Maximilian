@@ -41,8 +41,14 @@ class _ExpensesTrackerAppState extends State<ExpensesTrackerApp> {
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       context: context,
-      builder: (cxt) => const NewExpense(),
+      builder: (cxt) => NewExpense(onAddExpense: _addExpense),
     );
+  }
+
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
   }
 
   @override

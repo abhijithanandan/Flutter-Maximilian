@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +12,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
-  Category? _selectedCategory;
+  Category? _selectedCategory = Category.food;
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -24,6 +22,16 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final enterdAmount = double.tryParse(_amountController.text);
+    final amountIsInValid = enterdAmount == null || enterdAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInValid ||
+        _selectedDate == null) {
+      return;
+    }
   }
 
   @override
@@ -106,10 +114,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  log(_titleController.text);
-                  log(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('Save'),
               )
             ],

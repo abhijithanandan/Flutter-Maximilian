@@ -5,7 +5,7 @@ var kColorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 111, 27, 179));
 
 var kDarkColorScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 210, 232, 223));
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 8, 7, 7));
 
 void main() {
   runApp(
@@ -14,7 +14,7 @@ void main() {
         colorScheme: kDarkColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: kDarkColorScheme.onPrimaryContainer,
-          foregroundColor: kDarkColorScheme.onPrimaryContainer,
+          foregroundColor: kDarkColorScheme.onPrimary,
         ),
         cardTheme: const CardTheme().copyWith(
           color: kDarkColorScheme.secondaryContainer,
@@ -41,7 +41,7 @@ void main() {
         colorScheme: kColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: kColorScheme.onPrimaryContainer,
-          foregroundColor: kColorScheme.onPrimaryContainer,
+          foregroundColor: kColorScheme.onPrimary,
         ),
         cardTheme: const CardTheme().copyWith(
           color: kColorScheme.secondaryContainer,

@@ -11,6 +11,9 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreenState extends State<FiltersScreen> {
   var _glutenFreeFilterSet = false;
+  var _lactoseFreeFilterSet = false;
+  var _vegetarianFilterSet = false;
+  var _veganFilterSet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,30 +33,66 @@ class _FiltersScreenState extends State<FiltersScreen> {
       // }),
       body: Column(
         children: [
-          SwitchListTile(
-            value: _glutenFreeFilterSet,
-            onChanged: (isChecked) {
+          filterTile(context, 'Gluten-free', 'Only include gluten-free meals.',
+              _glutenFreeFilterSet, (isChecked) {
+            setState(() {
+              _glutenFreeFilterSet = isChecked;
+            });
+          }),
+          filterTile(
+            context,
+            'Lactose-free',
+            'Only include lactose-free meals.',
+            _lactoseFreeFilterSet,
+            (isChecked) {
               setState(() {
-                _glutenFreeFilterSet = isChecked;
+                _lactoseFreeFilterSet = isChecked;
               });
             },
-            title: Text(
-              'Gluten-free',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-            ),
-            subtitle: Text(
-              'Only include gluten-free meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 34, right: 22),
           ),
+          filterTile(context, 'Vegetarian', 'Only include gluten-free meals.',
+              _vegetarianFilterSet, (isChecked) {
+            setState(() {
+              _vegetarianFilterSet = isChecked;
+            });
+          }),
+          filterTile(context, 'Vegan', 'Only include gluten-free meals.',
+              _veganFilterSet, (isChecked) {
+            setState(() {
+              _veganFilterSet = isChecked;
+            });
+          }),
         ],
       ),
+    );
+  }
+
+  SwitchListTile filterTile(
+    BuildContext context,
+    String title,
+    String subtitle,
+    bool filterSet,
+    Function(bool) updateFilter,
+  ) {
+    return SwitchListTile(
+      value: filterSet,
+      onChanged: (isChecked) {
+        updateFilter(isChecked);
+      },
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+      ),
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      contentPadding: const EdgeInsets.only(left: 34, right: 22),
     );
   }
 }

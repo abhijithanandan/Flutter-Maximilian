@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 // import 'package:meals_app/screens/tabs.dart';
 // import 'package:meals_app/widgets/main_drawer.dart';
 
+enum FilterType {
+  glutenFree,
+  lactoseFree,
+  vegetarian,
+  vegan,
+}
+
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({super.key});
 
@@ -31,38 +38,53 @@ class _FiltersScreenState extends State<FiltersScreen> {
       //     );
       //   }
       // }),
-      body: Column(
-        children: [
-          filterTile(context, 'Gluten-free', 'Only include gluten-free meals.',
-              _glutenFreeFilterSet, (isChecked) {
-            setState(() {
-              _glutenFreeFilterSet = isChecked;
-            });
-          }),
-          filterTile(
-            context,
-            'Lactose-free',
-            'Only include lactose-free meals.',
-            _lactoseFreeFilterSet,
-            (isChecked) {
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) return;
+          Navigator.of(context).pop({
+            FilterType.glutenFree: _glutenFreeFilterSet,
+            FilterType.lactoseFree: _lactoseFreeFilterSet,
+            FilterType.vegetarian: _vegetarianFilterSet,
+            FilterType.vegan: _veganFilterSet,
+          });
+        },
+        child: Column(
+          children: [
+            filterTile(
+                context,
+                'Gluten-free',
+                'Only include gluten-free meals.',
+                _glutenFreeFilterSet, (isChecked) {
               setState(() {
-                _lactoseFreeFilterSet = isChecked;
+                _glutenFreeFilterSet = isChecked;
               });
-            },
-          ),
-          filterTile(context, 'Vegetarian', 'Only include gluten-free meals.',
-              _vegetarianFilterSet, (isChecked) {
-            setState(() {
-              _vegetarianFilterSet = isChecked;
-            });
-          }),
-          filterTile(context, 'Vegan', 'Only include gluten-free meals.',
-              _veganFilterSet, (isChecked) {
-            setState(() {
-              _veganFilterSet = isChecked;
-            });
-          }),
-        ],
+            }),
+            filterTile(
+              context,
+              'Lactose-free',
+              'Only include lactose-free meals.',
+              _lactoseFreeFilterSet,
+              (isChecked) {
+                setState(() {
+                  _lactoseFreeFilterSet = isChecked;
+                });
+              },
+            ),
+            filterTile(context, 'Vegetarian', 'Only include gluten-free meals.',
+                _vegetarianFilterSet, (isChecked) {
+              setState(() {
+                _vegetarianFilterSet = isChecked;
+              });
+            }),
+            filterTile(context, 'Vegan', 'Only include gluten-free meals.',
+                _veganFilterSet, (isChecked) {
+              setState(() {
+                _veganFilterSet = isChecked;
+              });
+            }),
+          ],
+        ),
       ),
     );
   }

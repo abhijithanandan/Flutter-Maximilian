@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/category.dart';
@@ -76,7 +78,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
         ),
         builder: (context, child) {
           return SlideTransition(
-              position: Tween(
+              position: Tween<Offset>(
                 begin: const Offset(0, 0.3),
                 end: const Offset(0, 0),
               ).animate(

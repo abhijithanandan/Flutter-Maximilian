@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app/data/categories.dart';
+import 'package:shopping_list_app/models/category.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -10,10 +11,13 @@ class NewItem extends StatefulWidget {
 
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
+  var _enteredName = '';
+  var _enteredQuantity = 1;
+  var _selectedCategory = categories[Categories.vegetables]!;
 
   void _saveItem() {
     if (_formKey.currentState!.validate()) {
-      // Save the item
+      _formKey.currentState!.save();
     }
   }
 
@@ -43,6 +47,9 @@ class _NewItemState extends State<NewItem> {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    _enteredName = newValue!;
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -52,7 +59,7 @@ class _NewItemState extends State<NewItem> {
                         decoration: InputDecoration(
                           label: Text('Quantity'),
                         ),
-                        initialValue: '1',
+                        initialValue: _enteredQuantity.toString(),
                         validator: (value) {
                           if (value == null ||
                               value.isEmpty ||
@@ -62,26 +69,36 @@ class _NewItemState extends State<NewItem> {
                           }
                           return null;
                         },
+                        onSaved: (newValue) {
+                          _enteredQuantity = int.parse(newValue!);
+                        },
                       ),
                     ),
                     Expanded(
-                      child: DropdownButtonFormField(items: [
-                        for (final category in categories.entries)
-                          DropdownMenuItem(
-                            value: category.value,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 16,
-                                  height: 16,
-                                  color: category.value.color,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(category.value.title),
-                              ],
+                      child: DropdownButtonFormField(
+                        items: [
+                          for (final category in categories.entries)
+                            DropdownMenuItem(
+                              value: category.value,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 16,
+                                    height: 16,
+                                    color: category.value.color,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(category.value.title),
+                                ],
+                              ),
                             ),
-                          ),
-                      ], onChanged: (value) {}),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCategory = value!;
+                          });
+                        },
+                      ),
                     )
                   ],
                 ),

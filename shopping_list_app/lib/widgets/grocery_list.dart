@@ -56,6 +56,10 @@ class _GroceryListState extends State<GroceryList> {
   }
 
   Future<List<GroceryItem>> _addItem() async {
+    _groceryItems = await _loadedItems;
+    if (!context.mounted) {
+      return _groceryItems;
+    }
     final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (ctx) {
@@ -63,7 +67,8 @@ class _GroceryListState extends State<GroceryList> {
         },
       ),
     );
-    _groceryItems = await _loadItem();
+
+    _groceryItems.add(newItem!);
     return _groceryItems;
   }
 

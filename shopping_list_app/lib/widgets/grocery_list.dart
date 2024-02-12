@@ -63,34 +63,32 @@ class _GroceryListState extends State<GroceryList> {
         },
       ),
     );
+    _groceryItems = await _loadItem();
+    return _groceryItems;
+  }
+
+  Future<List<GroceryItem>> _removeItem(GroceryItem item) async {
+    // Remove from list
     _groceryItems = await _loadedItems;
-    _groceryItems.add(newItem!);
+    final index = _groceryItems.indexWhere((element) => element.id == item.id);
+    _groceryItems.remove(item);
+
+    // Remove from database
+    final url = Uri.https(
+      'shopping-list-app-f59e2-default-rtdb.asia-southeast1.firebasedatabase.app',
+      'shopping_list/${item.id}.json',
+    );
+    final response = await http.delete(url);
+
+    // Add back to list if failed
+    if (response.statusCode >= 400) {
+      _groceryItems.insert(index, item);
+    }
     return _groceryItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<GroceryItem>> removeItem(GroceryItem item) async {
-      // Remove from list
-      _groceryItems = await _loadedItems;
-      final index =
-          _groceryItems.indexWhere((element) => element.id == item.id);
-      _groceryItems.remove(item);
-
-      // Remove from database
-      final url = Uri.https(
-        'shopping-list-app-f59e2-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'shopping_list/${item.id}.json',
-      );
-      final response = await http.delete(url);
-
-      // Add back to list if failed
-      if (response.statusCode >= 400) {
-        _groceryItems.insert(index, item);
-      }
-      return _groceryItems;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Groceries'),
@@ -131,7 +129,7 @@ class _GroceryListState extends State<GroceryList> {
             itemBuilder: (ctx, index) => Dismissible(
               key: ValueKey(snapshot.data![index].id),
               onDismissed: (direction) {
-                final items = removeItem(snapshot.data![index]);
+                final items = _removeItem(snapshot.data![index]);
                 setState(() {
                   _loadedItems = items;
                 });

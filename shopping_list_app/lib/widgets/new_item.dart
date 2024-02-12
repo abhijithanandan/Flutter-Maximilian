@@ -25,7 +25,7 @@ class _NewItemState extends State<NewItem> {
       final url = Uri.https(
           'shopping-list-app-f59e2-default-rtdb.asia-southeast1.firebasedatabase.app',
           'shopping_list.json');
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -38,6 +38,10 @@ class _NewItemState extends State<NewItem> {
           },
         ),
       );
+
+      if (!context.mounted) {
+        return;
+      }
       Navigator.of(context).pop(
         GroceryItem(
           id: DateTime.now().toString(),

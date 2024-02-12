@@ -15,6 +15,7 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> _groceryItems = [];
+  var _isLoading = true;
   void _loadItem() async {
     final url = Uri.https(
       'shopping-list-app-f59e2-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -26,7 +27,7 @@ class _GroceryListState extends State<GroceryList> {
     for (final item in listData.entries) {
       final category = categories.entries
           .firstWhere(
-            (catItem) => catItem.key == item.value['category'],
+            (catItem) => catItem.value.title == item.value['category'],
           )
           .value;
       loadedItems.add(GroceryItem(
@@ -38,6 +39,7 @@ class _GroceryListState extends State<GroceryList> {
     }
     setState(() {
       _groceryItems = loadedItems;
+      _isLoading = false;
     });
   }
 
@@ -64,6 +66,11 @@ class _GroceryListState extends State<GroceryList> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     void removeItem(GroceryItem item) {
       setState(() {
         _groceryItems.remove(item);

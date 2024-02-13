@@ -1,5 +1,6 @@
 {
     "dart.flutterSdkPaths": [
-        "/home/$USER/fvm/versions"
+        "/home/$USER/fvm/versions",
+        "./fvm/flutter_sdk"
     ]
 }

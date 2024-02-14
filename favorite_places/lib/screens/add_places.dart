@@ -1,4 +1,5 @@
 import 'package:favorite_places/providers/user_places.dart';
+import 'package:favorite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,23 +38,26 @@ class _AddPlacesScreenState extends ConsumerState<AddPlacesScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
-        child: Column(children: [
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Title',
+        child: Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Title',
+              ),
+              controller: _titleController,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
             ),
-            controller: _titleController,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+            const ImageInput(),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.add),
+              onPressed: _savePlace,
+              label: const Text('Add Place'),
             ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.add),
-            onPressed: _savePlace,
-            label: const Text('Add Place'),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

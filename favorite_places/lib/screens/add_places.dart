@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:favorite_places/providers/user_places.dart';
 import 'package:favorite_places/widgets/image_input.dart';
+import 'package:favorite_places/widgets/locaton_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -58,6 +59,8 @@ class _AddPlacesScreenState extends ConsumerState<AddPlacesScreen> {
                 _pickedImage = image;
               },
             ),
+            const SizedBox(height: 10),
+            LocationInput(),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               icon: const Icon(Icons.add),

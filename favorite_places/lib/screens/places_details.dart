@@ -1,10 +1,17 @@
 import 'package:favorite_places/models/place.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PlaceDetailsScreen extends StatelessWidget {
   const PlaceDetailsScreen({super.key, required this.place});
 
   final Place place;
+
+  String get _locationImage {
+    final lat = place.location.latitude;
+    final lng = place.location.longitude;
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=13&size=600x300&maptype=roadmap &markers=color:blue%7Clabel:A%7C$lat,$lng&key=${dotenv.env['MAPS_API_KEY']}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +33,31 @@ class PlaceDetailsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
-                    radius: 26,
-                    backgroundImage: FileImage(
-                      place.image,
-                    ),
+                    radius: 70,
+                    backgroundImage: NetworkImage(_locationImage),
                   ),
-                  Text(
-                    place.location.address,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.black54,
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    child: Text(
+                      place.location.address,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                    ),
                   ),
                 ],
               ),

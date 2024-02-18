@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:favorite_places/models/place.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:sqflite/sqlite_api.dart';
 
 Future<sqflite.Database> _getDatabase() async {
   final dbPath = await sqflite.getDatabasesPath();

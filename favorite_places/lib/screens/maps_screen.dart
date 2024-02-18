@@ -20,6 +20,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  LatLng? _pickedLocation;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +32,21 @@ class _MapScreenState extends State<MapScreen> {
           if (widget.isSelecting)
             IconButton(
               icon: const Icon(Icons.save),
-              onPressed: () {},
+              onPressed: () {
+                if (_pickedLocation == null) {
+                  return;
+                }
+                Navigator.of(context).pop(_pickedLocation);
+              },
             ),
         ],
       ),
       body: GoogleMap(
+        onTap: (position) {
+          setState(() {
+            _pickedLocation = position;
+          });
+        },
         initialCameraPosition: CameraPosition(
           target: LatLng(
             widget.initialLocation.latitude,
@@ -43,15 +54,25 @@ class _MapScreenState extends State<MapScreen> {
           ),
           zoom: 16,
         ),
-        markers: {
-          Marker(
-            markerId: const MarkerId('m1'),
-            position: LatLng(
-              widget.initialLocation.latitude,
-              widget.initialLocation.longitude,
-            ),
-          ),
-        },
+        markers: (_pickedLocation == null && widget.isSelecting)
+            ? {}
+            : {
+                Marker(
+                  markerId: const MarkerId('m1'),
+                  position: _pickedLocation ??
+                      LatLng(
+                        widget.initialLocation.latitude,
+                        widget.initialLocation.longitude,
+                      ),
+                  // Alternate Method
+                  // position: _pickedLocation != null
+                  //     ? _pickedLocation!
+                  //     : LatLng(
+                  //         widget.initialLocation.latitude,
+                  //         widget.initialLocation.longitude,
+                  //       ),
+                ),
+              },
       ),
     );
   }

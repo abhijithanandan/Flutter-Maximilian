@@ -19,7 +19,7 @@ Future<sqflite.Database> _getDatabase() async {
 class UserPlacesNotifier extends StateNotifier<List<Place>> {
   UserPlacesNotifier() : super([]);
 
-  void loadPlaces() async {
+  Future<void> loadPlaces() async {
     sqflite.Database db = await _getDatabase();
     final data = await db.query('user_places');
     final places = data

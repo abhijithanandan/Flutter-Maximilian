@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app/widgets/user_image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,33 +18,48 @@ class _AuthScreenState extends State<AuthScreen> {
   var _isLogin = false;
   var _enteredEmail = '';
   var _enteredPassword = '';
+  File? _selectedImage;
+
+  void _onPickedImage(File image) {
+    _selectedImage = image;
+  }
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
-    if (isValid) {
-      _form.currentState!.save();
-      if (_isLogin) {
-        // Log user in
-      } else {
-        try {
-          final UserCredential = await _firebase.createUserWithEmailAndPassword(
-            email: _enteredEmail,
-            password: _enteredPassword,
-          );
-        } on FirebaseAuthException catch (error) {
-          if (error.code == 'email-already-in-use') {}
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error.message ?? 'An error occurred'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
-      }
-    } else {
+    if (!isValid) {
       return;
+    }
+
+    if (!_isLogin && _selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please pick an image'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    _form.currentState!.save();
+    if (_isLogin) {
+      // Log user in
+    } else {
+      try {
+        final UserCredential = await _firebase.createUserWithEmailAndPassword(
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+      } on FirebaseAuthException catch (error) {
+        if (error.code == 'email-already-in-use') {}
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.message ?? 'An error occurred'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     }
   }
 
@@ -78,7 +95,10 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (!_isLogin) const UserImagePicker(),
+                          if (!_isLogin)
+                            UserImagePicker(
+                              onImagePicked: _onPickedImage,
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                               labelText: 'Email address',

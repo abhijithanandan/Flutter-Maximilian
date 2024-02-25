@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/widgets/user_image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 final _firebase = FirebaseAuth.instance;
@@ -46,10 +47,17 @@ class _AuthScreenState extends State<AuthScreen> {
       // Log user in
     } else {
       try {
-        final UserCredential = await _firebase.createUserWithEmailAndPassword(
+        final userCredential = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEmail,
           password: _enteredPassword,
         );
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCredential.user!.uid} .jpg');
+
+        await storageRef.putFile(_selectedImage!);
+        final imageUrl = await storageRef.getDownloadURL();
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {}
         ScaffoldMessenger.of(context).clearSnackBars();

@@ -19,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
-    if (!isValid) {
+    if (isValid) {
       _form.currentState!.save();
       if (_isLogin) {
         // Log user in
